@@ -1,7 +1,8 @@
 const dotenv = require("dotenv");
 const TelegramBot = require("node-telegram-bot-api");
 const API = require("./api");
-const pause = require("./pause");
+const createXLS = require("./createXLS");
+const formatDate = require("./formatDate");
 
 dotenv.config();
 
@@ -20,7 +21,7 @@ bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
   try {
     if (msg.text === "/start") {
-      return bot.sendMessage(chatId, "Введите никнейм канала на Youtube");
+      return bot.sendMessage(chatId, "Введи никнейм канала на Youtube");
     }
     if (msg.text.includes("/")) {
       console.log("user entered incorrectly >>", msg.text);
@@ -29,17 +30,20 @@ bot.on("message", async (msg) => {
 
     const username = msg.text;
     console.log("user entered >>", username);
+    await bot.sendMessage(chatId, "Генерирую документ Excel");
     const channelId = await API.getChannelId(username, googleApiKey);
     const videosList = await API.getVideosList(channelId, googleApiKey);
 
-    for (let i = 0; i < videosList.length; i++) {
-      await Promise.all([
-        pause(),
-        bot.sendMessage(chatId, videosList[i], { parse_mode: "HTML" }),
-      ]);
-    }
+    const xlsBuffer = await createXLS(videosList, username);
+    const formattedDate = formatDate();
+    const xlsFileOptions = {
+      filename: `${username}_${formattedDate}.xls`,
+      contentType: 'application/vnd.ms-excel',
+    };
+    return bot.sendDocument(chatId, xlsBuffer, undefined, xlsFileOptions);
+
   } catch (error) {
     console.error(error.stack);
-    return bot.sendMessage(chatId, error.message);
+    return bot.sendMessage(chatId, `Произошла ошибка: ${error.message}`);
   }
 });

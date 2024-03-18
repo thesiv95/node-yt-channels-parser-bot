@@ -1,1 +1,0 @@
-module.exports = (ms = 900) => new Promise(resolve => setTimeout(resolve, ms));
