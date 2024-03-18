@@ -29,7 +29,7 @@ bot.on("message", async (msg) => {
     }
 
     let username = msg.text;
-    if (username[0] === "@") username = `@${username}`; // always make @ in nickname and file
+    if (username[0] !== "@") username = `@${username}`; // always make @ in nickname and file
     console.log("user entered >>", username);
     await bot.sendMessage(chatId, "Генерирую документ Excel");
     const channelId = await API.getChannelId(username, googleApiKey);
