@@ -7,7 +7,7 @@ const ExcelJS = require("exceljs");
  * @returns {Promise<Buffer>}
  */
 const createXLS = async (videosList, username) => {
-  if (username[0] === "@") username = `@${username}`; // always make @ in file name
+  if (username[0] === "@") username = `@${username}`; // always make @ in list
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet(username, {
     pageSetup: { paperSize: 9, orientation: "portrait" },
