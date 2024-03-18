@@ -28,7 +28,7 @@ bot.on("message", async (msg) => {
       return bot.sendMessage(chatId, "Неправильный ввод");
     }
 
-    const username = msg.text;
+    let username = msg.text;
     if (username[0] === "@") username = `@${username}`; // always make @ in nickname and file
     console.log("user entered >>", username);
     await bot.sendMessage(chatId, "Генерирую документ Excel");
