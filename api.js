@@ -22,20 +22,22 @@ exports.getChannelId = async (channelUsername, apiKey) => {
 /**
  * @param {string} channelId
  * @param {string} apiKey
- * @returns {Promise<[string]>}
+ * @returns {Promise<object>}
  */
 exports.getVideosList = async (channelId, apiKey) => {
   try {
-    const url = `${baseURL}?channelId=${channelId}&order=date&part=snippet&type=video&maxResults=15&key=${apiKey}`;
+    const url = `${baseURL}?channelId=${channelId}&order=date&part=snippet&type=video&maxResults=30&key=${apiKey}`;
     let response = await axios.get(url);
     response = response.data;
 
     const { items } = response;
 
     const mappedItems = items.map((item, index) => {
-      return `<b>${index + 1}. ${item.snippet.title}</b>\n${
-        item.snippet.description
-      }`;
+      return {
+        id: index + 1,
+        title: item.snippet.title,
+        description: item.snippet.description
+      };
     });
     return mappedItems;
   } catch (error) {
