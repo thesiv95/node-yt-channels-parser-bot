@@ -38,11 +38,10 @@ bot.on("message", async (msg) => {
     const xlsBuffer = await createXLS(videosList, username);
     const formattedDate = formatDate();
     const xlsFileOptions = {
-      filename: `${username}_${formattedDate}.xls`,
-      contentType: 'application/vnd.ms-excel',
+      filename: `${username}_${formattedDate}.xlsx`,
+      contentType: "application/octet-stream"
     };
-    return bot.sendDocument(chatId, xlsBuffer, undefined, xlsFileOptions);
-
+    return bot.sendDocument(chatId, xlsBuffer, {}, xlsFileOptions);
   } catch (error) {
     console.error(error.stack);
     return bot.sendMessage(chatId, `Произошла ошибка: ${error.message}`);
