@@ -26,7 +26,7 @@ exports.getChannelId = async (channelUsername, apiKey) => {
  */
 exports.getVideosList = async (channelId, apiKey) => {
   try {
-    // telegram will not give more than 50 results unfortunately
+    // API will not give more than 50 results unfortunately
     const url = `${baseURL}?channelId=${channelId}&order=date&part=snippet&type=video&maxResults=50&key=${apiKey}`;
     let response = await axios.get(url);
     response = response.data;
